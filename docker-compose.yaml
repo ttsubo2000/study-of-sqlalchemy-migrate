@@ -1,0 +1,16 @@
+version: '3'
+services:
+  mariadb:
+    image: mariadb:10.5.9
+    container_name: mariadb
+    hostname: mariadb
+    environment:
+    - MYSQL_ROOT_PASSWORD=mysql123
+    - MYSQL_DATABASE=heat
+
+  heat-mitaka:
+    build: build/heat-mitaka/.
+    image: heat-mitaka:eol
+    command: /bin/sh -c "tail -f /dev/null"
+    container_name: heat-mitaka
+    hostname: heat-mitaka
