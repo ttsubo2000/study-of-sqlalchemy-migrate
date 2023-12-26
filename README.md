@@ -38,19 +38,24 @@
 
 	# python manage.py version_control mysql://root:mysql123@mariadb/heat /work/sampleApp/db/sqlalchemy/migrate_repo
 
-#### 1.5. Check current version
+#### 1.5. Check the latest version available in a repository.
 
 	# migrate version /work/sampleApp/db/sqlalchemy/migrate_repo
 	0
 
-#### 1.6. Connect Database engine
+#### 1.6. Check the current version of the repository.
+
+	# migrate db_version mysql://root:mysql123@mariadb/heat /work/sampleApp/db/sqlalchemy/migrate_repo
+	0
+
+#### 1.7. Connect Database engine
 
 	% docker exec -it mariadb bash
 
 	# mysql -uroot -pmysql123
 
 
-#### 1.7. Check Database list
+#### 1.8. Check Database list
 
 	MariaDB [(none)]> show databases;
 	+--------------------+
@@ -63,7 +68,7 @@
 	+--------------------+
 	4 rows in set (0.001 sec)
 
-#### 1.8. Connect "heat" Database
+#### 1.9. Connect "heat" Database
 
 	MariaDB [(none)]> connect heat
 	Reading table information for completion of table and column names
@@ -72,17 +77,17 @@
 	Connection id:    9
 	Current database: heat
 
-#### 1.9. Check Table list
+#### 1.10. Check Table list
 
 	MariaDB [heat]> show tables;
-	+-------------------------+
-	| Tables_in_heat |
-	+-------------------------+
-	| migrate_version         |
-	+-------------------------+
+	+-----------------+
+	| Tables_in_heat  |
+	+-----------------+
+	| migrate_version |
+	+-----------------+
 	1 rows in set (0.001 sec)
 
-#### 1.10. Check "migrate_version" Table
+#### 1.11. Check "migrate_version" Table
 
 	MariaDB [heat]> select * from migrate_version;
 	+---------------+--------------------------------------------+---------+
@@ -92,7 +97,7 @@
 	+---------------+--------------------------------------------+---------+
 	1 row in set (0.001 sec)
 
-#### 1.11. Modify migration script for adding "books" table in heat
+#### 1.12. Modify migration script for adding "books" table in heat
 
 	% docker exec -it heat-mitaka bash
 
@@ -129,26 +134,31 @@
 	    meta.bind = migrate_engine
 	    table.drop()
 
-#### 1.12. Apply migration script
+#### 1.13. Check the latest version available in a repository.
+
+	# migrate version /work/sampleApp/db/sqlalchemy/migrate_repo
+	1
+
+#### 1.14. Apply migration script
 
 	# python manage.py upgrade mysql://root:mysql123@mariadb/heat /work/sampleApp/db/sqlalchemy/migrate_repo
 	0 -> 1...
 	done
 
-#### 1.13. Check current version
+#### 1.15. Check the current version of the repository.
 
-	# migrate version /work/sampleApp/db/sqlalchemy/migrate_repo
+	# migrate db_version mysql://root:mysql123@mariadb/heat /work/sampleApp/db/sqlalchemy/migrate_repo
 	1
 
-#### 1.14. Confirm new table
+#### 1.16. Confirm new table
 
 	MariaDB [heat]> show tables;
-	+-------------------------+
-	| Tables_in_heat |
-	+-------------------------+
-	| books                   |
-	| migrate_version         |
-	+-------------------------+
+	+-----------------+
+	| Tables_in_heat  |
+	+-----------------+
+	| books           |
+	| migrate_version |
+	+-----------------+
 	2 rows in set (0.002 sec)
 
 	MariaDB [heat]> desc books;
@@ -164,7 +174,7 @@
 	5 rows in set (0.001 sec)
 
 
-#### 1.15. Modify migration script for adding "isbn" column in books table
+#### 1.17. Modify migration script for adding "isbn" column in books table
 
 	% docker exec -it heat-mitaka bash
 
@@ -197,15 +207,24 @@
 	    table = Table('books', meta, autoload=True)
 	    table.c.isbn.drop()
 
-#### 1.16. Apply migration script
+#### 1.18. Check the latest version available in a repository.
+
+	# migrate version /work/sampleApp/db/sqlalchemy/migrate_repo
+	2
+
+#### 1.19. Apply migration script
 
 	# python manage.py upgrade mysql://root:mysql123@mariadb/heat /work/sampleApp/db/sqlalchemy/migrate_repo
 	1 -> 2...
 	done
 
+#### 1.20. Check the current version of the repository.
 
-#### 1.17. Confirm new column
-	
+	# migrate db_version mysql://root:mysql123@mariadb/heat /work/sampleApp/db/sqlalchemy/migrate_repo
+	2
+
+#### 1.21. Confirm new column
+
 	MariaDB [heat]> desc books;
 	+------------+---------------------+------+-----+---------+----------------+
 	| Field      | Type                | Null | Key | Default | Extra          |
@@ -219,7 +238,7 @@
 	+------------+---------------------+------+-----+---------+----------------+
 	6 rows in set (0.003 sec)
 
-#### 1.18. Confirm sqlalchemy.orm
+#### 1.22. Confirm sqlalchemy.orm
 
 	# cd /work/sampleApp
 
@@ -246,7 +265,7 @@
 
 	OK
 
-#### 1.19. drop version_control
+#### 1.23. drop version_control
 
 	# cd /work/sampleApp/db/sqlalchemy/migrate_repo
 
@@ -338,7 +357,7 @@ You can confirm repository_path and migration-version
 #### 2.7. Check current version
 
 	# migrate version /opt/heat/heat/db/sqlalchemy/migrate_repo
-	71	
+	71
 
 #### 2.8. Check index information in heat
 
